@@ -2,11 +2,71 @@
 <html>
     <head>
         <meta charset="UTF-8">
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css ">
+        <link rel="stylesheet" href="https://use.fontawesome.com/9504dda1f9.css">
+        <script src="https://use.fontawesome.com/c27c3ea163.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
+
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+        <style>
+            body{
+                margin: 0;
+                font-size: .9rem;
+                font-weight: 400;
+                line-height: 1.6;
+                color: #212529;
+                text-align: left;
+                background-color: #f5f8fa;
+            }
+
+            .navbar-laravel
+            {
+                box-shadow: 0 2px 4px rgba(0,0,0,.04);
+            }
+
+            .navbar-brand , .nav-link, .my-form, .login-form
+            {
+                font-family: Raleway, sans-serif;
+            }
+
+            .my-form
+            {
+                padding-top: 1.5rem;
+                padding-bottom: 1.5rem;
+            }
+
+            .my-form .row
+            {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .login-form
+            {
+                padding-top: 1.5rem;
+                padding-bottom: 1.5rem;
+            }
+
+            .login-form .row
+            {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+        </style>
+        {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% include 'layouts/nav.html.twig' %}
+
+        {% block body %}
+        {% endblock %}
+
         {% block javascripts %}{% endblock %}
     </body>
+
 </html>

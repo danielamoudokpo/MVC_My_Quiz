@@ -13,7 +13,7 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
         <style>
-            body{
+            {# body{
                 margin: 0;
                 font-size: .9rem;
                 font-weight: 400;
@@ -55,7 +55,7 @@
             {
                 margin-left: 0;
                 margin-right: 0;
-            }
+            } #}
 
         </style>
         {% endblock %}
@@ -63,8 +63,7 @@
     <body>
         {% include 'layouts/nav.html.twig' %}
 
-        {% block body %}
-        {% endblock %}
+        {% block body %} {% endblock %}
 
         {% block javascripts %}{% endblock %}
     </body>

@@ -1,0 +1,101 @@
+easy_admin:
+    
+    design:
+
+        menu: 
+            - {label: "Entity"}
+            - Categorie
+            - Question
+            - Reponse
+
+            - {label: "Settings"}
+            - {entity: User, icon: "user",permission: 'ROLE_ADMIN'}        
+
+    site_name: 'MY_QUIZ'
+
+    user:
+        display_name: true
+
+        display_avatar: true
+
+    entities:
+        # List the entity class name you want to manage
+
+         Categorie:
+            class: App\Entity\Categorie
+            
+     
+            # list:
+            #     collapse_actions: true
+            #     actions: ['show']  
+            #     batch_actions: ['delete']
+            #     filters: ['categorie']
+        
+
+         Question:
+            class: App\Entity\Question
+
+            form: 
+                fields:
+                    - {type: 'group', icon: 'pencil', label: 'Reponses ff', css_class: 'col-lg-7'}
+                    - {property: 'id_categorie', type: 'integer'}
+                    - Question
+                    # - {property: 'reponse_expected', type: 'checkbox'}
+
+            list:
+                collapse_actions: true
+                actions: ['show']  
+                batch_actions: ['delete']
+                filters: ['question']
+        
+         Reponse:
+            class: App\Entity\Reponse
+            label: "Reponse"
+            form: 
+                fields:
+                    - {type: 'group', icon: 'pencil', label: 'Reponses ff', css_class: 'col-lg-7'}
+                    - {property: 'id_question', type: 'integer'}
+                    - Reponse
+                    - {property: 'reponse_expected', type: 'checkbox'}
+
+
+            list:
+                collapse_actions: true
+                actions: ['show'] 
+                batch_actions: ['delete']
+                filters: ['reponse']
+
+         User:
+            class: App\Entity\User
+            label: "User"
+            form: 
+                fields:
+                    # - {type: 'group', icon: 'pencil', label: 'Reponses ff', css_class: 'col-lg-7'}
+                    - {property: 'name', type: 'text'}
+                    - {property: 'email', type: 'email'}
+                    - {property: 'password', type: 'password'}
+                    - {property: 'roles', type: 'text'}
+            
+
+            list:
+                collapse_actions: true
+                actions: ['show'] 
+                batch_actions: ['delete']
+                filters: ['name']
+                item_permission: 'ROLE_ADMIN'
+            
+            show:
+                fields:
+                     - {property: 'name', type: 'text'}
+                     - {property: 'email', type: 'email'}
+                     - '-password'
+                     - {property: 'roles'}
+            edit:
+                fields:
+                     - {property: 'name', type: 'text'}
+                     - {property: 'email', type: 'email'}
+                     - '-password'
+                     - {property: 'roles'}
+
+      
+

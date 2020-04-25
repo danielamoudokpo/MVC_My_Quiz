@@ -1,0 +1,15 @@
+# imports:
+#     - { resource: security.yaml }
+
+# framework:
+#     secret: '%secret%'
+#     router: { resource: '%kernel.project_dir%/app/config/routing.yaml' }
+
+# twig:
+#     debug: '%kernel.debug%'
+#     strict_variables: '%kernel.debug%'
+
+# fos_user:
+#     registration:
+#         confirmation:
+#             enabled: true

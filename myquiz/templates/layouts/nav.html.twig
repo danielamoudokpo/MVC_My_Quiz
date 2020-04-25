@@ -11,11 +11,11 @@
                     <a class="nav-link" href="/login">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{path('user_logout')}}">Register</a>
+                    <a class="nav-link" href="{{path('user_register')}}">Register</a>
                 </li>
             {% else %}
                  <li class="nav-item">
-                    <a class="nav-link" href="/logout">Logout</a>
+                    <a class="nav-link" href="{{path('user_logout')}}">Logout</a>
                 </li>
             {% endif %}
             </ul>

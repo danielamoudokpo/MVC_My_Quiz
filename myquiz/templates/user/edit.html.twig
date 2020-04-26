@@ -1,0 +1,69 @@
+{% extends "base.html.twig" %}
+
+{% block title %} {% endblock %}
+
+{% block stylesheet %} 
+
+
+{% endblock %}
+
+
+{% block body %} 
+
+<h1>{{user.id}}</h1>
+<div class ="container">
+<form class="form-horizontal" method="POST" action="{{path('user_update')}}">
+<fieldset>
+
+<!-- Form Name -->
+<legend>Edit Profile </legend>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">Name</label>  
+  <div class="col-md-4">
+  <input type="text" name="name" placeholder="New Name..." class="form-control input-md" value="{{user.name}}">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">Email</label>  
+  <div class="col-md-4">
+  <input type="email" name="email" placeholder="New Email..." class="form-control input-md" value="{{user.email}}">
+    
+  </div>
+</div>
+
+<!-- Text input -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textarea">Password</label>
+  <div class="col-md-4">                     
+    <input class="form-control" type="password" name="password" placeholder="New Password..."></input>
+  </div>
+</div>
+
+<!-- Text input -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textarea">Confirm Password</label>
+  <div class="col-md-4">                     
+    <input class="form-control" type="password" name="confirm_password" placeholder="Confirm Password..."></input>
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="btnCancel">Save Marker</label>
+  <div class="col-md-8">
+    <button type="submit" class="btn btn-success">Save</button>
+  </div>
+</div>
+
+</fieldset>
+</form>
+
+   <a  href="{{path('home')}}"><button id="btnCancel" name ="btnCancel" class="btn btn-primary">Cancel</button></a>
+
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block stylesheets %}
+
+    <style>
+    
+    </style>
+
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 style="text-align: center"> WELCOME TO MY_QUIZ</h1>
+</div>
+<div class="container">	
+    <h1> CATEGORIES </h1>
+	<div class="row category-child" style="margin-top:20px">
+        {% if Categorie %}
+
+        {% for Categorie in Categorie %}
+
+		<div class="col-lg-3 col-md-6 col-xs-8 card " style= "width: 18rem;">
+                <a class="img-thumbnail" href="{{ Categorie.id}}" style="text-decoration : none ; color : black" >
+                    <img class="card-img-top" src="https://data.whicdn.com/images/342185442/original.jpg?t=1585689695" alt="">
+                    <div class="card-body">
+                        <div class="">
+                            <h2> {{Categorie.name}} </h2>
+                        </div>
+                    </div>
+                </a>
+        </div>
+          {% endfor %}
+	</div>
+  
+    {% else %}
+
+        <p> No Categories Found</p>
+
+    {% endif %}
+</div>
+
+{% endblock %}

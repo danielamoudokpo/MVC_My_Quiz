@@ -9,7 +9,7 @@ use App\Entity\Categorie;
 class CategoryController extends AbstractController
 {
     /**
-     * @Route("/", name="category")
+     * @Route("/category", name="category")
      */
     public function index()
     {

@@ -3,92 +3,137 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\RegistrationFormType;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Mailer\MailerInterface;
+use App\Entity\Categorie;
 use Symfony\Component\Mime\Email;
+use App\Form\RegistrationFormType;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 class UserController extends AbstractController
 {
     /**
+     * @var Security
+     */
+    private $security;
+
+    public function __construct(Security $security)
+    {
+       $this->security = $security;
+    }
+
+    /**
      * @Route("/", name="home")
      */
     public function index()
     {
-        return $this->render('category/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-    }
+        // $user_id = app.user->getId();
+        // $user = User::getName() ;
 
-     /**
-     * @Route("/login", name="user_login",methods={"GET", "POST"})
-     */
-
-    public function login(AuthenticationUtils $authenticationUtils)
-    {
-        $error = $authenticationUtils->getLastAuthenticationError();
-
-        return $this->render('user/login.html.twig');
-    }
-
-
-     /**
-     * @Route("/logout", name="user_logout")
-     */
-
-    public function logout(){
-
-    }
-
-     /**
-     * @Route("/register", name="user_register")
-     */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder,MailerInterface $mailer): Response
-    {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $email = $form->get('email')->getData();
-            
-            $user->setRoles(['ROLE_USER']);
-
-            // encode the plain password
-            $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            // do anything else you need here, like send an email
+        // return $this->render('category/index.html.twig', [
         
-            $email = (new Email())
-            ->from('freeadssymfony@gmail.com')
-            ->to($email)
-            ->priority(Email::PRIORITY_HIGH)
-            ->subject('Time for Symfony Mailer!')
-            ->text('Sending emails is fun again!')
-            ->html('<p>Its me</p>');
+        // ]);
 
-        $mailer->send($email);
+        $repository = $this->getDoctrine()->getRepository(Categorie::class);
 
-            return $this->redirectToRoute('user_login');
+        $categorie = $repository->findAll();
+
+        return $this->render('user/index.html.twig', [
+            'Categorie'=> $categorie,
+        ]);
+    
+    }
+
+    /**
+     * @route("/edit/{id}" , name ="user_edit")
+     */
+
+
+    public function edit($id){
+
+        $repository = $this->getDoctrine()->getRepository(User::class);
+
+        $user = $repository->find($id);
+    
+        return $this->render("user/edit.html.twig",[
+        'user'=> $user
+        ]);
+
+    }
+
+    /**
+     * @route("/update" , name ="user_update" ,methods={"GET", "POST"})
+     */
+
+    public function update(Request $request,UserPasswordEncoderInterface $passwordEncoder):Response
+    {
+
+        $user = $this->security->getUser(); 
+
+        $post = $request->request->all();
+
+        $name='';
+        $email='';
+        $password='';
+        $confirm_password='';
+
+
+        foreach($post as $key => $value){
+            switch($key){
+                case 'name':
+                    $name = $post['name'];
+                        break;
+                    case 'email':
+                    $email = $post['email'];
+                        break;
+                    case 'password':
+                    $password = $post['password'];
+                        break;
+                    case 'confirm_password':
+                    $confirm_password = $post['confirm_password'];
+                        break;
+            
+            }
+        
         }
 
-        return $this->render('user/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
+        if (isset($name)) {
+            // var_dump($name);
+            $user->setName($name);
+            // $entityManager = $this->getDoctrine()->getManager();
+            // $entityManager->persist($user);
+        }
+        
+        if (isset($email)) {
+            $user->setEmail($email);
+            // $entityManager = $this->getDoctrine()->getManager();
+            // $entityManager->persist($user);
+            // var_dump($email);
+        }
+
+        if (strlen($password) >= 8 && ($password === $confirm_password) ) {
+            // encode the plain password
+                $user->setPassword(
+                    $passwordEncoder->encodePassword(
+                        $user,
+                            $password
+                    )
+                );
+
+            }
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->persist($user);
+
+            $entityManager->flush();
+
+        return $this->redirectToRoute('home');
     }
+
 }

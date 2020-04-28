@@ -1,0 +1,36 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{% endblock %}
+
+{% block stylesheets %}
+
+    <style>
+    
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% if Questions %}
+    <div class="form">
+
+     <h1>Questions from {{ Name}}</h1>
+
+    </div>
+    {% for Questions in Questions %}
+
+    <h5> {{Questions}} <h5>
+    <hr>
+
+    {% endfor %}
+
+    {% endif %}
+
+
+</div>
+
+
+{% endblock %}

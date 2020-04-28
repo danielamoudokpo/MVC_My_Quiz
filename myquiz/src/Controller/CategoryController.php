@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Categorie;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Categorie;
 
 class CategoryController extends AbstractController
 {
@@ -21,4 +21,5 @@ class CategoryController extends AbstractController
             'Categorie'=> $categorie,
         ]);
     }
+
 }

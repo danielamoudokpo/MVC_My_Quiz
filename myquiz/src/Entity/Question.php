@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,7 +26,7 @@ class Question
     /**
      * @var int|null
      *
-     * @ORM\Column(name="id_categorie", type="integer", nullable=true)
+     * @ORM\Column(name="categorie_id", type="integer", nullable=true)
      */
     private $idCategorie;
 
@@ -34,6 +36,22 @@ class Question
      * @ORM\Column(name="question", type="string", length=255, nullable=true)
      */
     private $question;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Categorie", inversedBy="questions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $categorie;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Reponse", mappedBy="question", orphanRemoval=true)
+     */
+    private $reponses;
+
+    public function __construct()
+    {
+        $this->reponses = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -67,6 +85,49 @@ class Question
     public function __toString(){
 
         return $this->question;
+    }
+
+    public function getCategorie(): ?Categorie
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?Categorie $categorie): self
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Reponse[]
+     */
+    public function getreponses(): Collection
+    {
+        return $this->reponses;
+    }
+
+    public function addReponses(Reponse $reponses): self
+    {
+        if (!$this->reponses->contains($reponses)) {
+            $this->reponses[] = $reponses;
+            $reponses->setQuestion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReponses(Reponse $reponses): self
+    {
+        if ($this->reponses->contains($reponses)) {
+            $this->reponses->removeElement($reponses);
+            // set the owning side to null (unless already changed)
+            if ($reponses->getQuestion() === $this) {
+                $reponses->setQuestion(null);
+            }
+        }
+
+        return $this;
     }
 
 

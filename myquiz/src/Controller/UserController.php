@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Categorie;
+use App\Entity\Question;
+use App\Entity\Reponse;
 use Symfony\Component\Mime\Email;
 use App\Form\RegistrationFormType;
 use Symfony\Component\Security\Core\Security;
@@ -50,6 +52,7 @@ class UserController extends AbstractController
     
     }
 
+
     /**
      * @route("/edit/{id}" , name ="user_edit")
      */
@@ -83,7 +86,6 @@ class UserController extends AbstractController
         $password='';
         $confirm_password='';
 
-
         foreach($post as $key => $value){
             switch($key){
                 case 'name':
@@ -106,15 +108,10 @@ class UserController extends AbstractController
         if (isset($name)) {
             // var_dump($name);
             $user->setName($name);
-            // $entityManager = $this->getDoctrine()->getManager();
-            // $entityManager->persist($user);
         }
         
         if (isset($email)) {
             $user->setEmail($email);
-            // $entityManager = $this->getDoctrine()->getManager();
-            // $entityManager->persist($user);
-            // var_dump($email);
         }
 
         if (strlen($password) >= 8 && ($password === $confirm_password) ) {
@@ -127,6 +124,7 @@ class UserController extends AbstractController
                 );
 
             }
+
             $entityManager = $this->getDoctrine()->getManager();
 
             $entityManager->persist($user);
@@ -134,6 +132,7 @@ class UserController extends AbstractController
             $entityManager->flush();
 
         return $this->redirectToRoute('home');
+         
     }
 
 }

@@ -42,6 +42,12 @@ class Reponse
      */
     private $reponseExpected;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Question", inversedBy="reponses")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $question;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +91,18 @@ class Reponse
     public function __toString(){
 
         return $this->reponse;
+    }
+
+    public function getQuestion(): ?Question
+    {
+        return $this->question;
+    }
+
+    public function setQuestion(?Question $question): self
+    {
+        $this->question = $question;
+
+        return $this;
     }
 
 

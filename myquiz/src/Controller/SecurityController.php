@@ -64,7 +64,7 @@ class SecurityController extends AbstractController
             ->text('Sending emails is fun again!')
             ->html('<p>Its fucking working </p>');
 
-        $mailer->send($email);
+            $mailer->send($email);
 
             return $this->redirectToRoute('security_login');
         }

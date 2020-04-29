@@ -15,19 +15,38 @@
 <div class="container">
 
     {% if Questions %}
+    {# {% if Questions[0] is defined %} #}
+
     <div class="form">
 
-     <h1>Questions from {{ Name}}</h1>
+     <h1>Questions from {{ Name }}</h1>
 
     </div>
-    {% for Questions in Questions %}
+    {# {% for question in Questions %} #}
+        {% set firstItem = Questions[0] %}
 
-    <h5> {{Questions}} <h5>
+    <h5> {{firstItem.id}} <h5>
     <hr>
 
+    {# {% endfor %} #}
+
+    {% endif %}
+    <div>
+    {% if Reponse %}
+
+        {% for reponse in Reponse  %}
+
+            <h5>{{reponse}}<h5>
+
+            <hr>
     {% endfor %}
 
     {% endif %}
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-primary"> NEXT</button>
+    </div>
 
 
 </div>

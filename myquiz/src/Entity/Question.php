@@ -102,7 +102,7 @@ class Question
     /**
      * @return Collection|Reponse[]
      */
-    public function getreponses(): Collection
+    public function getReponses(): Collection
     {
         return $this->reponses;
     }

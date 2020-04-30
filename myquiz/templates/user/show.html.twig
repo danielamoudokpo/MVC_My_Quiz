@@ -14,27 +14,33 @@
 
 <div class="container">
 
-    {% if Questions %}
+    {% if Categorie %}
     {# {% if Questions[0] is defined %} #}
 
     <div class="form">
 
-     <h1>Questions from {{ Name }}</h1>
+     <h1>Questions from {{ Categorie }}</h1>
 
     </div>
     {# {% for question in Questions %} #}
-        {% set firstItem = Questions[0] %}
+        {# {% set firstId = Questions[0].id %} #}
 
-    <h5> {{firstItem.id}} <h5>
+    <h5> {{ Qus.question }} <h5>
+
+    {# {{dump(Categorie.questions[Qus.id]) }} #}
+    {# {{dump(Qus.id) }} #}
+
+
     <hr>
+    {# {{dump(Questions)}} #}
 
     {# {% endfor %} #}
 
     {% endif %}
     <div>
-    {% if Reponse %}
+    {% if Qus %}
 
-        {% for reponse in Reponse  %}
+        {% for reponse in Qus.Reponses  %}
 
             <h5>{{reponse}}<h5>
 
@@ -45,9 +51,18 @@
     </div>
 
     <div>
-        <button type="submit" class="btn btn-primary"> NEXT</button>
-    </div>
+    {% set q_id = Qus.id + 1 %}
+    {# {% for key, question in Categorie %}
+    {{ dump(key) }}
+    {% endfor %} #}
+    <a href = "/show/{{Categorie.id}}/{{q_id}}">
+        <button type="submit" class="btn btn-primary">
+             NEXT
+        </button>
 
+    </a>
+     
+    </div>
 
 </div>
 

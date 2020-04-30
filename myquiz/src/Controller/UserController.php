@@ -43,11 +43,8 @@ class UserController extends AbstractController
         // ]);
 
         $repository = $this->getDoctrine()->getRepository(Categorie::class);
-        
-        // $repo = $this->getDoctrine()->getRepository(Question::class);
-        
-        // $question= $repo->getQuestions();
-        // dd($question);
+
+
         $categorie = $repository->findAll();
 
         return $this->render('user/index.html.twig', [

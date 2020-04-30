@@ -21,54 +21,50 @@ class QuestionController extends AbstractController
     }
 
         /**
-     * @Route("/show/{categorie_id}", name= "user_show",methods={"GET","HEAD"})
+     * @Route("/show/{categorieId}", name= "user_show",methods={"GET","HEAD"})
      */
 
-    public function show($categorie_id){
+    public function show($categorieId){
 
         $categorie = $this->getDoctrine()
         ->getRepository(Categorie::class)
-                ->find($categorie_id);
-        // dd($categorie);
-
-        $re =1;
-
-        
-
-        $reponses = $this->getDoctrine()
-        ->getRepository(Question::class)
-                    ->find($re);
-
-      
-
-        $reponse = $reponses->getReponses();
-        // dd($reponse);
+                ->find($categorieId);
 
         $questions = $categorie->getQuestions();
 
-        // $question_id = $categorie->getQuestions();
+        $firstId = $questions[0]->getId();
 
-        // dd($question_id);
+        return $this->redirectToRoute("show_question", ['categorie' => $categorieId, 'question' => $firstId ]);
 
-        $name = $categorie->getName();
         
-        // dd($reponse[1]);
-        // dd($questions[1]);
-        return $this->render("user/show.html.twig",[
-            'Questions' => $questions,
-            'Name' => $name,
-            'Reponse'=> $reponse,    
-        ]);
     
         }
 
     /**
-     *  @Route("show/{category_id}/{question_id}", name="show_question")
+     *  @Route("show/{categorie}/{question}", name="show_question")
     */
 
-    public function question(){
+    public function question( Categorie $categorie,Question $question){
 
 
+        // $questions = $categorie->getQuestions();
+
+        $qId = $question->getId();
+
+        // $catId = $categorie->getId();
+
+        // dd($qId);
+
+        $qs = $this->getDoctrine()->getRepository(Question::class)->find($qId);
+
+        // echo $catId,$qId;
+
+        return $this->render("user/show.html.twig",[
+            // 'Questions' => $questions,
+            'Categorie' => $categorie,
+            'Qus'=> $qs,
+            // 'Reponse'=> $reponse, 
+        ]);
 
     }
 

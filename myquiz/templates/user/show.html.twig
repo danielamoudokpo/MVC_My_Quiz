@@ -14,71 +14,90 @@
 
 <div class="container">
     {%  if not app.flashes('notice') %}
-<div class="show">
-
-    {% if Categorie %}
-    <div class="form">
-
-     <h1>Questions in {{ Categorie }}</h1>
-
-    </div>
-    <br>
-        <h3> {{ Questions.question }} <h3>
-    <hr>
-
-    {% endif %}
-
-    <div>
-
-    {% if Questions %}
+    {# {% if not app.flashes('False')%} #}
+    {% if not Message  %}
     
-     <form method ="POST" action="/show/{{Categorie.id}}/{{Questions.id}}">
+    <div class="show">
+        {% if Categorie %}
+        <div class="form">
+            <h1>Questions in {{ Categorie }}</h1>
+        </div>
+        <br>
+            <h3> {{ Questions.question }} <h3>
+        <hr>
 
-        {% for reponse in Questions.Reponses  %}
+        {% endif %}
 
-            <h5>
-               <input type="radio" name="reponse" value ='{{reponse.id}}'> {{reponse}} </input>
-            <h5>
+        <div>
 
-            <hr>
+            {% if Questions %}
 
-    {% endfor %}
-    <div>
-    {# {% for key, question in Categorie %}
-    {{ dump(key) }}
-    {% endfor %} #}
-        <button type="submit" class="btn btn-success">
-                Check
-        </button>
-     
+                <form method ="POST" action="/show/{{Categorie.id}}/{{Questions.id}}">
+                    {% for reponse in Questions.Reponses  %}
+                        <h5>
+                        <input type="radio" name="reponse" value ='{{reponse.id}}'> {{reponse}} </input>
+                        <h5>
+                    <hr>
+                {% endfor %}
+                    <div>
+                    {# {% for key, question in Categorie %}
+                    {{ dump(key) }}
+                    {% endfor %} #}
+                        <button type="submit" class="btn btn-success">
+                                Check
+                        </button>
+                    </div>
+                </form>
+
+            {% endif %}
+
+        </div>
+
+            {% set q_id = Questions.id + 1 %}
+            <a href = "/show/{{Categorie.id}}/{{q_id}}">
+                <button type="submit" class="btn btn-primary pull-right"> NEXT</button>
+            </a>
+
     </div>
-        </form>
 
-    {% endif %}
-
-    </div>
+</div>
+    {% else %}
+        {% for key ,message in Message %}
+            {% if key == "Correct"%}
+                <div class="alert alert-success">
+                    <h2>  {{message}}</h2>
+                </div>
+            {% else %}
+                <div class="alert alert-danger">
+                    <h2>  {{message}} </h2>
+                </div>
+            {% endif %}
+        {% endfor %}
         {% set q_id = Questions.id + 1 %}
 
-       <a href = "/show/{{Categorie.id}}/{{q_id}}">
-        <button type="submit" class="btn btn-primary pull-right">
-             NEXT
-        </button>
-
+        <a href = "/show/{{Categorie.id}}/{{q_id}}">
+            <button type="submit" class="btn btn-primary pull-right"> NEXT</button>
         </a>
 
-</div>
-
-</div>
+    {% endif %}
 
 {% else %}
 
    {# {% for message in app.flashes('notice') %} #}
-    <div class="alert alert-danger">
-    <h2>  There is no more questions!</h2>
+    <div class="alert alert-primary">
+        <h2> Congrats You Have Finished The Quiz !</h2>
     </div>
+    <div>
+    {{dump(Count)}}
+        <a>
+            <button class ="btn btn-success"> Check Result</button>
+        </a>
+        <a href="/">
+            <button class ="btn btn-primary"> Return to categories</button>
+        </a>
+    </div>
+
     {# {% endfor %} #}
-
-
 
 {% endif %}
 

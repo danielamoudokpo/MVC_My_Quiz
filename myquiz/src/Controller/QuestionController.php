@@ -78,43 +78,45 @@ class QuestionController extends AbstractController
             $qs = $this->getDoctrine()->getRepository(Question::class)->find($qId);
 
         }
-
         // echo ($request->request->get('reponse'));
 
         $responseChoosen = $request->request->get('reponse');
 
         // echo($responseChoosen);   
 
+        $message =[];
+        $cA =[];
+        $ctn =0;
 
-        // dd($qId);
+
         if (isset($responseChoosen)) {
+
+            $repo = $this->getDoctrine()->getRepository(Reponse::class)->findOneById($responseChoosen);
+            $check = $repo->getReponseExpected();
+
+            if ($check == 1) {
+                $ctn++;
+                array_push($cA,$ctn);
+                $message =[
+                    'Correct' => "Correct Answer"
+                ];
+            }
+            else{
+                $message =[
+                    'Incorrect' => "Wrong Answer"
+                ];;
+            }
+            var_dump($cA);
+        }
+
+      
+       
         
-        $repo = $this->getDoctrine()->getRepository(Reponse::class)->findOneById($responseChoosen);
-        // dd($repo);
-        $check = $repo->getReponseExpected();
-
-        if ($check == 1) {
-            echo "oui";
-
-            $this->addFlash(
-                'success',
-                'Correct Answer!'
-            );
-
-        }
-
-        }
-        // print_r($repo);
-
-        // $rpExp = $repo->getReponseExpected();
-
-        // print_r($rpExp);
-
-        // shuffle($qs);
-
         return $this->render("user/show.html.twig",[
             'Categorie' => $idCategorie,
             'Questions'=> $qs,
+            'Message'=> $message,
+            'Count' => $ctn,
         ]);
         
     }

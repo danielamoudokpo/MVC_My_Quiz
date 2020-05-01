@@ -13,58 +13,73 @@
 {% block body %}
 
 <div class="container">
+    {%  if not app.flashes('notice') %}
+<div class="show">
 
     {% if Categorie %}
-    {# {% if Questions[0] is defined %} #}
-
     <div class="form">
 
-     <h1>Questions from {{ Categorie }}</h1>
+     <h1>Questions in {{ Categorie }}</h1>
 
     </div>
-    {# {% for question in Questions %} #}
-        {# {% set firstId = Questions[0].id %} #}
-
-    <h5> {{ Qus.question }} <h5>
-
-    {# {{dump(Categorie.questions[Qus.id]) }} #}
-    {# {{dump(Qus.id) }} #}
-
-
+    <br>
+        <h3> {{ Questions.question }} <h3>
     <hr>
-    {# {{dump(Questions)}} #}
-
-    {# {% endfor %} #}
 
     {% endif %}
+
     <div>
-    {% if Qus %}
 
-        {% for reponse in Qus.Reponses  %}
+    {% if Questions %}
+    
+     <form method ="POST" action="/show/{{Categorie.id}}/{{Questions.id}}">
 
-            <h5>{{reponse}}<h5>
+        {% for reponse in Questions.Reponses  %}
+
+            <h5>
+               <input type="radio" name="reponse" value ='{{reponse.id}}'> {{reponse}} </input>
+            <h5>
 
             <hr>
+
     {% endfor %}
-
-    {% endif %}
-    </div>
-
     <div>
-    {% set q_id = Qus.id + 1 %}
     {# {% for key, question in Categorie %}
     {{ dump(key) }}
     {% endfor %} #}
-    <a href = "/show/{{Categorie.id}}/{{q_id}}">
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-success">
+                Check
+        </button>
+     
+    </div>
+        </form>
+
+    {% endif %}
+
+    </div>
+        {% set q_id = Questions.id + 1 %}
+
+       <a href = "/show/{{Categorie.id}}/{{q_id}}">
+        <button type="submit" class="btn btn-primary pull-right">
              NEXT
         </button>
 
-    </a>
-     
-    </div>
+        </a>
 
 </div>
 
+</div>
+
+{% else %}
+
+   {# {% for message in app.flashes('notice') %} #}
+    <div class="alert alert-danger">
+    <h2>  There is no more questions!</h2>
+    </div>
+    {# {% endfor %} #}
+
+
+
+{% endif %}
 
 {% endblock %}

@@ -62,7 +62,9 @@ class SecurityController extends AbstractController
             ->priority(Email::PRIORITY_HIGH)
             ->subject('Time for Symfony Mailer!')
             ->text('Sending emails is fun again!')
-            ->html('<p>Its fucking working </p>');
+            ->html('<p>Thanks for reistering on My_Quiz. Please click on the link to complete your registration
+            <a>http://localhost:8000/</a> 
+            </p>');
 
             $mailer->send($email);
 

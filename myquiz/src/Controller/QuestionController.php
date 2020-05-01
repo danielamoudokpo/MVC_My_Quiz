@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+// use dump;
+use App\Entity\Reponse;
 use App\Entity\Question;
 use App\Entity\Categorie;
-use App\Entity\Reponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -15,7 +17,7 @@ class QuestionController extends AbstractController
      */
     public function index()
     {
-        return $this->render('question/index.html.twig', [
+         $this->render('question/index.html.twig', [
             'controller_name' => 'QuestionController',
         ]);
     }
@@ -34,38 +36,87 @@ class QuestionController extends AbstractController
 
         $firstId = $questions[0]->getId();
 
-        return $this->redirectToRoute("show_question", ['categorie' => $categorieId, 'question' => $firstId ]);
+        return $this->redirectToRoute("show_question", ['idCategorie' => $categorieId, 'idQuestion' => $firstId ]);
 
         
     
         }
 
     /**
-     *  @Route("show/{categorie}/{question}", name="show_question")
+     *  @Route("show/{idCategorie}/{idQuestion}", name="show_question")
     */
 
-    public function question( Categorie $categorie,Question $question){
+    public function question(Request $request, Categorie $idCategorie,Question $idQuestion){
 
 
-        // $questions = $categorie->getQuestions();
+        $qId = $idQuestion->getId();
 
-        $qId = $question->getId();
+        $da =$idCategorie->getQuestions();
 
-        // $catId = $categorie->getId();
+        $quesInCat = [];
+
+        foreach ($da as $key => $value) {
+            
+            $id = $value->getId();
+
+            array_push($quesInCat,$id);
+
+        }
+        // print_r($quesInCat);
+
+        if(array_search($qId,$quesInCat) === false){
+
+            $this->addFlash(
+                'notice',
+                'Ther is no more questions!'
+            );
+
+            $qs = $this->getDoctrine()->getRepository(Question::class)->find($qId);
+            
+        }else{
+
+            $qs = $this->getDoctrine()->getRepository(Question::class)->find($qId);
+
+        }
+
+        // echo ($request->request->get('reponse'));
+
+        $responseChoosen = $request->request->get('reponse');
+
+        // echo($responseChoosen);   
+
 
         // dd($qId);
+        if (isset($responseChoosen)) {
+        
+        $repo = $this->getDoctrine()->getRepository(Reponse::class)->findOneById($responseChoosen);
+        // dd($repo);
+        $check = $repo->getReponseExpected();
 
-        $qs = $this->getDoctrine()->getRepository(Question::class)->find($qId);
+        if ($check == 1) {
+            echo "oui";
 
-        // echo $catId,$qId;
+            $this->addFlash(
+                'success',
+                'Correct Answer!'
+            );
+
+        }
+
+        }
+        // print_r($repo);
+
+        // $rpExp = $repo->getReponseExpected();
+
+        // print_r($rpExp);
+
+        // shuffle($qs);
 
         return $this->render("user/show.html.twig",[
-            // 'Questions' => $questions,
-            'Categorie' => $categorie,
-            'Qus'=> $qs,
-            // 'Reponse'=> $reponse, 
+            'Categorie' => $idCategorie,
+            'Questions'=> $qs,
         ]);
-
+        
     }
 
 }

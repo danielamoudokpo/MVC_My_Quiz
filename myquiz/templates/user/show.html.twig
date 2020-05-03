@@ -15,89 +15,98 @@
 <div class="container">
     {%  if not app.flashes('notice') %}
     {# {% if not app.flashes('False')%} #}
-    {% if not Message  %}
-    
-    <div class="show">
-        {% if Categorie %}
-        <div class="form">
-            <h1>Questions in {{ Categorie }}</h1>
+        {% if not Message  %}
+
+        <div class="show">
+
+            {% if Categorie %}
+                <div class="form">
+                    <h1>Questions in {{ Categorie }}</h1>
+                </div>
+                <br>
+                    <h3> {{ Questions.question }} <h3>
+                <hr>
+
+            {% endif %}
+
+            <div>
+
+                {% if Questions %}
+
+                    <form method ="POST" action="/show/{{Categorie.id}}/{{Questions.id}}">
+                        {# {{dump(Count)}} #}
+                        {% for reponse in Questions.Reponses  %}
+                            <h5>
+                                {# <input type="hidden" name="clicked" value="{{Count}}" /> #}
+                                <input type="radio" name="reponse" value ='{{reponse.id}}'> {{reponse}} </input>
+                            <h5>
+                        <hr>
+                        
+                {% endfor %}
+                        <div>
+                        {# {% for key, question in Categorie %}
+                        {{ dump(key) }}
+                        {% endfor %} #}
+                            <button type="submit" class="btn btn-success">
+                                    Check
+                            </button>
+                        </div>
+                    </form>
+
+                {% endif %}
+
+            </div>
+                    
+                {% set q_id = Questions.id + 1 %}
+                    <a href = "/show/{{Categorie.id}}/{{q_id}}">
+                        <button type="submit" class="btn btn-primary pull-right"> NEXT</button>
+                    </a>
+
         </div>
-        <br>
-            <h3> {{ Questions.question }} <h3>
-        <hr>
+
+        </div>
+        {% else %}
+                {% for key ,message in Message %}
+                    {% if key == "Correct"%}
+                        <div class="alert alert-success">
+                            <h2>  {{message}}</h2>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-danger">
+                            <h2>  {{message}} </h2>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            
+            {% set q_id = Questions.id + 1 %}
+
+                <a href = "/show/{{Categorie.id}}/{{q_id}}">
+                    <button type="submit" class="btn btn-primary pull-right"> NEXT</button>
+                </a>
 
         {% endif %}
 
-        <div>
-
-            {% if Questions %}
-
-                <form method ="POST" action="/show/{{Categorie.id}}/{{Questions.id}}">
-                    {% for reponse in Questions.Reponses  %}
-                        <h5>
-                        <input type="radio" name="reponse" value ='{{reponse.id}}'> {{reponse}} </input>
-                        <h5>
-                    <hr>
-                {% endfor %}
-                    <div>
-                    {# {% for key, question in Categorie %}
-                    {{ dump(key) }}
-                    {% endfor %} #}
-                        <button type="submit" class="btn btn-success">
-                                Check
-                        </button>
-                    </div>
-                </form>
-
-            {% endif %}
-
-        </div>
-
-            {% set q_id = Questions.id + 1 %}
-            <a href = "/show/{{Categorie.id}}/{{q_id}}">
-                <button type="submit" class="btn btn-primary pull-right"> NEXT</button>
-            </a>
-
-    </div>
-
-</div>
-    {% else %}
-        {% for key ,message in Message %}
-            {% if key == "Correct"%}
-                <div class="alert alert-success">
-                    <h2>  {{message}}</h2>
-                </div>
-            {% else %}
-                <div class="alert alert-danger">
-                    <h2>  {{message}} </h2>
-                </div>
-            {% endif %}
-        {% endfor %}
-        {% set q_id = Questions.id + 1 %}
-
-        <a href = "/show/{{Categorie.id}}/{{q_id}}">
-            <button type="submit" class="btn btn-primary pull-right"> NEXT</button>
-        </a>
-
-    {% endif %}
-
 {% else %}
 
-   {# {% for message in app.flashes('notice') %} #}
     <div class="alert alert-primary">
         <h2> Congrats You Have Finished The Quiz !</h2>
     </div>
     <div>
-    {{dump(Count)}}
-        <a>
+    {# {{dump(Count)}} #}
+        {% if app.user %}
+        <a href="/score/{{Categorie.id}}/{{Count}}">
             <button class ="btn btn-success"> Check Result</button>
         </a>
+        {% else %}
+                <h1 class="alert alert-success"> your score is {{Count}}</h1>
+        <a href ="{{ path("security_register") }}">
+            <button class="btn btn-primary" > Please Register To see Details ! </button>
+        </a>
+        {% endif %}
         <a href="/">
             <button class ="btn btn-primary"> Return to categories</button>
         </a>
     </div>
-
-    {# {% endfor %} #}
 
 {% endif %}
 

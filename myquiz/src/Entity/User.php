@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Score;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -36,7 +37,7 @@ class User implements UserInterface
     private $email;
     
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="json_array")
      */
     private $roles = [];
 
@@ -50,6 +51,8 @@ class User implements UserInterface
      * @Assert\EqualTo(propertyPath="password",message="The password doesn't match")
      */
     public $confirm_password;
+
+ 
 
     public function getId(): ?int
     {
@@ -147,6 +150,7 @@ class User implements UserInterface
     public function __toString(){
         return $this->name;
     }
+
 
    
 }

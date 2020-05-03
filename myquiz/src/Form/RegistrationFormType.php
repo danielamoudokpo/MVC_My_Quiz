@@ -54,7 +54,7 @@ class RegistrationFormType extends AbstractType
                         'Super' => 'ROLE_SUPER_ADMIN',
                     ],
                 ],
-                'mapped' => false,
+                // 'mapped' => false,
             ])
 
             ->add('agreeTerms', CheckboxType::class, [

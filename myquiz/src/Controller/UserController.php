@@ -54,11 +54,9 @@ class UserController extends AbstractController
     
     }
 
-
     /**
      * @route("/edit/{id}" , name ="user_edit")
      */
-
 
     public function edit($id){
 
@@ -76,11 +74,11 @@ class UserController extends AbstractController
      * @route("/update" , name ="user_update" ,methods={"GET", "POST"})
      */
 
-    public function update(Request $request,UserPasswordEncoderInterface $passwordEncoder):Response
+    public function update(Request $request,UserPasswordEncoderInterface $passwordEncoder,MailerInterface $mailer):Response
     {
 
         $user = $this->security->getUser(); 
-
+        $actualEmail =$user->getEmail();
         $post = $request->request->all();
 
         $name='';
@@ -113,7 +111,11 @@ class UserController extends AbstractController
         }
         
         if (isset($email)) {
+            if ($email === $actualEmail) {
+                echo"this email already exist";
+            }else{
             $user->setEmail($email);
+            }
         }
 
         if (strlen($password) >= 8 && ($password === $confirm_password) ) {
@@ -132,6 +134,23 @@ class UserController extends AbstractController
             $entityManager->persist($user);
 
             $entityManager->flush();
+
+
+        if (($email)!= '') {
+
+            $email = (new Email())
+            ->from('freeadssymfony@gmail.com')
+            ->to($email)
+            ->priority(Email::PRIORITY_HIGH)
+            ->subject('Time for Symfony Mailer!')
+            ->text('Sending emails is fun again!')
+            ->html('<p>Thanks for reistering on My_Quiz. Please click on the link to complete your registration
+            <a>http://localhost:8000/token_234edqadcfdxaaxkey</a> 
+            </p>');
+
+            $mailer->send($email);
+        
+        } 
 
         return $this->redirectToRoute('home');
          

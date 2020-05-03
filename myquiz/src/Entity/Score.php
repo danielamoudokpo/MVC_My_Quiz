@@ -17,74 +17,76 @@ class Score
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\OneToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $user_id;
+    private $user;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Categorie" )
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $categorie;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $categorie_id;
+    private $grade;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="datetime")
      */
-    private $question_id;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $score;
+    private $created_at;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUserId(): ?int
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(int $user_id): self
+    public function setUser(User $user): self
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getCategorieId(): ?int
+    public function getCategorie(): ?Categorie
     {
-        return $this->categorie_id;
+        return $this->categorie;
     }
 
-    public function setCategorieId(int $categorie_id): self
+    public function setCategorie(Categorie $categorie): self
     {
-        $this->categorie_id = $categorie_id;
+        $this->categorie = $categorie;
 
         return $this;
     }
 
-    public function getQuestionId(): ?int
+    public function getGrade(): ?int
     {
-        return $this->question_id;
+        return $this->grade;
     }
 
-    public function setQuestionId(int $question_id): self
+    public function setGrade(int $grade): self
     {
-        $this->question_id = $question_id;
+        $this->grade = $grade;
 
         return $this;
     }
 
-    public function getScore(): ?int
+    public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->score;
+        return $this->created_at;
     }
 
-    public function setScore(int $score): self
+    public function setCreatedAt(\DateTimeInterface $created_at): self
     {
-        $this->score = $score;
+        $this->created_at = $created_at;
 
         return $this;
     }

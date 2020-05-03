@@ -7,6 +7,7 @@ easy_admin:
             - Categorie
             - Question
             - Reponse
+            - Score 
 
             - {label: "Settings"}
             - {entity: User, icon: "user",permission: 'ROLE_ADMIN'}        
@@ -65,6 +66,10 @@ easy_admin:
                 batch_actions: ['delete']
                 filters: ['reponse']
 
+         Score:
+            class: App\Entity\Score
+            label: "Score"  
+            
          User:
             class: App\Entity\User
             label: "User"
@@ -74,8 +79,8 @@ easy_admin:
                     - {property: 'name', type: 'text'}
                     - {property: 'email', type: 'email'}
                     - {property: 'password', type: 'password'}
-                    - {property: 'roles', type: 'text'}
-            
+                    - {property: 'roles'}
+          
 
             list:
                 collapse_actions: true
@@ -97,5 +102,6 @@ easy_admin:
                      - '-password'
                      - {property: 'roles'}
 
+       
       
 

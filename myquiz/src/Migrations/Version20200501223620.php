@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200427224142 extends AbstractMigration
+final class Version20200501223620 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,10 +22,10 @@ final class Version20200427224142 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE question ADD categorie_id INT NOT NULL');
-        $this->addSql('ALTER TABLE question ADD CONSTRAINT FK_B6F7494EBCF5E72D FOREIGN KEY (categorie_id) REFERENCES categorie (id)');
-        $this->addSql('CREATE INDEX IDX_B6F7494EBCF5E72D ON question (categorie_id)');
-        $this->addSql('ALTER TABLE user CHANGE roles roles JSON NOT NULL');
+        $this->addSql('ALTER TABLE score ADD CONSTRAINT FK_32993751A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE score ADD CONSTRAINT FK_32993751BCF5E72D FOREIGN KEY (categorie_id) REFERENCES categorie (id)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_32993751A76ED395 ON score (user_id)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_32993751BCF5E72D ON score (categorie_id)');
     }
 
     public function down(Schema $schema) : void
@@ -33,9 +33,9 @@ final class Version20200427224142 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE question DROP FOREIGN KEY FK_B6F7494EBCF5E72D');
-        $this->addSql('DROP INDEX IDX_B6F7494EBCF5E72D ON question');
-        $this->addSql('ALTER TABLE question DROP categorie_id');
-        $this->addSql('ALTER TABLE user CHANGE roles roles JSON DEFAULT NULL');
+        $this->addSql('ALTER TABLE score DROP FOREIGN KEY FK_32993751A76ED395');
+        $this->addSql('ALTER TABLE score DROP FOREIGN KEY FK_32993751BCF5E72D');
+        $this->addSql('DROP INDEX UNIQ_32993751A76ED395 ON score');
+        $this->addSql('DROP INDEX UNIQ_32993751BCF5E72D ON score');
     }
 }

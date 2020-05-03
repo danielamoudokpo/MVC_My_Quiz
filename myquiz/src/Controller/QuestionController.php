@@ -2,16 +2,29 @@
 
 namespace App\Controller;
 
-// use dump;
+use App\Entity\Score;
 use App\Entity\Reponse;
 use App\Entity\Question;
 use App\Entity\Categorie;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class QuestionController extends AbstractController
 {
+
+      /**
+     * @var Security
+     */
+    private $security;
+
+    public function __construct(Security $security)
+    {
+       $this->security = $security;
+    }
+
     /**
      * @Route("/question", name="question")
      */
@@ -37,8 +50,6 @@ class QuestionController extends AbstractController
         $firstId = $questions[0]->getId();
 
         return $this->redirectToRoute("show_question", ['idCategorie' => $categorieId, 'idQuestion' => $firstId ]);
-
-        
     
         }
 
@@ -46,8 +57,7 @@ class QuestionController extends AbstractController
      *  @Route("show/{idCategorie}/{idQuestion}", name="show_question")
     */
 
-    public function question(Request $request, Categorie $idCategorie,Question $idQuestion){
-
+    public function question(Request $request, Categorie $idCategorie,Question $idQuestion,SessionInterface $session){
 
         $qId = $idQuestion->getId();
 
@@ -55,63 +65,73 @@ class QuestionController extends AbstractController
 
         $quesInCat = [];
 
+        //  QUESTION IN EACH CATEGORY  //
+
         foreach ($da as $key => $value) {
-            
             $id = $value->getId();
-
             array_push($quesInCat,$id);
-
         }
-        // print_r($quesInCat);
 
+        //  FIRST QUESTION IN ECAH CATEGORY//
+        $firstQuestion = $quesInCat[0];
+
+        // WHEN THERE IS NO MORE QUESTIONS (IF QUESTION DOESN'T EXIST IN THE CATEGORY) SEND NOTICE //
         if(array_search($qId,$quesInCat) === false){
 
             $this->addFlash(
                 'notice',
                 'Ther is no more questions!'
             );
-
             $qs = $this->getDoctrine()->getRepository(Question::class)->find($qId);
-            
         }else{
-
             $qs = $this->getDoctrine()->getRepository(Question::class)->find($qId);
-
         }
-        // echo ($request->request->get('reponse'));
 
+        // AFTER RESPONSE IS CHOOSEN//
         $responseChoosen = $request->request->get('reponse');
+        
+        //RESET SCORE//
+        if($firstQuestion == $qId  ){
+            $session->set('ctn', 0);
+        }
 
-        // echo($responseChoosen);   
-
+        // CHECK RESPONSE CHOOSEN BY USER
         $message =[];
-        $cA =[];
         $ctn =0;
 
-
         if (isset($responseChoosen)) {
-
             $repo = $this->getDoctrine()->getRepository(Reponse::class)->findOneById($responseChoosen);
             $check = $repo->getReponseExpected();
-
+            
             if ($check == 1) {
                 $ctn++;
-                array_push($cA,$ctn);
                 $message =[
                     'Correct' => "Correct Answer"
                 ];
+                // SESSION && COUNTER START //
+                $counter = $session->get('ctn',0);
+
+                    if(!empty($counter)){
+                        $counter++;
+                    }   
+                    else{
+                        $counter=1;
+                    }
+
+                $session->set('ctn', $counter);
+                
             }
             else{
+        
                 $message =[
                     'Incorrect' => "Wrong Answer"
-                ];;
+                ];
             }
-            var_dump($cA);
         }
 
-      
-       
-        
+        //  RETRIEVE COUNTER //
+        $ctn = $session->get('ctn');
+
         return $this->render("user/show.html.twig",[
             'Categorie' => $idCategorie,
             'Questions'=> $qs,

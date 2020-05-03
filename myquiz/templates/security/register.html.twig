@@ -28,8 +28,9 @@
                         </div>
                          
                            {% if not is_granted('ROLE_ADMIN') %}
+                           
                                  <div class="form-group">
-                                     {{ form_row(registrationForm.roles) }}
+                                     {{ form_row(registrationForm.roles,{'label':' '} )}}
                                 </div>        
                              {% endif %}
                     </div>

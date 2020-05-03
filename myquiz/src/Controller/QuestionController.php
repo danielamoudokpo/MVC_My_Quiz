@@ -47,11 +47,24 @@ class QuestionController extends AbstractController
 
         $questions = $categorie->getQuestions();
 
-        $firstId = $questions[0]->getId();
+        $quesInCat=[];
 
-        return $this->redirectToRoute("show_question", ['idCategorie' => $categorieId, 'idQuestion' => $firstId ]);
-    
+        foreach ($questions as $key => $value) {
+            $id = $value->getId();
+            array_push($quesInCat,$id);
         }
+        $errors = array_filter($quesInCat);
+
+        if (!empty($errors)) {
+
+            $firstId = $questions[0]->getId();
+
+            return $this->redirectToRoute("show_question", ['idCategorie' => $categorieId, 'idQuestion' => $firstId ]);
+        }else{
+            return $this->redirectToRoute('home');
+        } 
+    }      // dd($quesInCat);
+
 
     /**
      *  @Route("show/{idCategorie}/{idQuestion}", name="show_question")
@@ -119,7 +132,6 @@ class QuestionController extends AbstractController
                     }
 
                 $session->set('ctn', $counter);
-                
             }
             else{
         

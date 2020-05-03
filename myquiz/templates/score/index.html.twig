@@ -11,10 +11,15 @@
 <div class="example-wrapper">
     {# {{ dump(Score)}} #}
     <h1>Your Final Score is {{ Score.grade }}! ✅</h1>
-
-        {# <ul>
-        <li>Your controller at <code><a href="{{ '/var/www/html/MVC_My_Quiz/myquiz/src/Controller/ScoreController.php'|file_link(0) }}">src/Controller/ScoreController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/var/www/html/MVC_My_Quiz/myquiz/templates/score/index.html.twig'|file_link(0) }}">templates/score/index.html.twig</a></code></li>
-    </ul> #}
+        {# {{ post.published_at|date("m/d/Y") }} #}
+        <hr>
+        <h3> You play The {{Score.Categorie.name}} Quiz </h3>
+        <hr>
+        <h3> You have answered {{Score.grade}}/10 Correct</h3>
+        <hr>
+        {% set var = 10 %}
+        <h3> You have answered {{ var - Score.grade }}/10 Incorrect</h3>
+        <hr>
+        <h3>You palyed on the {{Score.createdAt|date("m/d/y")}}</h3>
 </div>
 {% endblock %}
